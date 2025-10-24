@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>Máy tính Flexbox JS</title>
+    <style>
+        body {
+            background: #f4f4f7;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calculator {
+            background: #fff;
+            border-radius: 32px;
+            box-shadow: 0 4px 32px #0001;
+            width: 340px;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .display {
+            width: 100%;
+            background: #222;
+            color: #fff;
+            font-size: 2.4rem;
+            border-radius: 12px;
+            padding: 18px 18px 10px 18px;
+            text-align: right;
+            margin-bottom: 18px;
+            min-height: 48px;
+            letter-spacing: 2px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .buttons button {
+            flex: 1 0 21%;
+            background: #f6f7f8;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            padding: 18px 0;
+            margin-bottom: 0;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px #0001;
+        }
+        .buttons button:active {
+            background: #e0e0e0;
+        }
+        .buttons .wide {
+            flex: 2 0 44%;
+            background: #a67c52;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button onclick="clearAll()">C</button>
+            <button onclick="deleteOne()">DEL</button>
+            <button onclick="addDot()">.</button>
+            <button onclick="addOperator('÷')">÷</button>
+
+            <button onclick="press('7')">7</button>
+            <button onclick="press('8')">8</button>
+            <button onclick="press('9')">9</button>
+            <button onclick="addOperator('×')">×</button>
+
+            <button onclick="press('4')">4</button>
+            <button onclick="press('5')">5</button>
+            <button onclick="press('6')">6</button>
+            <button onclick="addOperator('-')">-</button>
+
+            <button onclick="press('1')">1</button>
+            <button onclick="press('2')">2</button>
+            <button onclick="press('3')">3</button>
+            <button onclick="addOperator('+')">+</button>
+
+            <button class="wide" onclick="press('0')">0</button>
+            <button class="wide" onclick="calculate()">=</button>
+        </div>
+    </div>
+    <script>
+        // JS xử lý máy tính
+        let display = document.getElementById('display');
+        let current = '0';
+
+        function updateDisplay() {
+            display.textContent = current;
+        }
+
+        function press(val) {
+            if (current === '0' && val !== '.') {
+                current = val;
+            } else {
+                current += val;
+            }
+            updateDisplay();
+        }
+
+        function clearAll() {
+            current = '0';
+            updateDisplay();
+        }
+
+        function deleteOne() {
+            if (current.length > 1) {
+                current = current.slice(0, -1);
+            } else {
+                current = '0';
+            }
+            updateDisplay();
+        }
+
+        function addDot() {
+            let parts = current.split(/[\+\-\*\/]/);
+            if (!parts[parts.length - 1].includes('.')) {
+                current += '.';
+            }
+            updateDisplay();
+        }
+
+        function addOperator(op) {
+            if (/[+\-*/]$/.test(current)) {
+                current = current.slice(0, -1) + op;
+            } else {
+                current += op;
+            }
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                let result = eval(current.replace(/÷/g, '/').replace(/×/g, '*'));
+                current = String(result);
+            } catch {
+                current = 'Error';
+            }
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>
